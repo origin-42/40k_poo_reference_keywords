@@ -1,16 +1,32 @@
-import { useState } from 'react'
 import './App.css';
+import { useState, useEffect } from 'react';
+import { findMatchingKeywords } from "./util/helpers";
 
-import { ten_ed } from './assets/10th/core_rules/index';
+
+import { KeywordInput } from "./components/input";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [keywords, setKeywords] = useState([]);
+  const [matchingKeywords, setMatchingKeywords] = useState([]);
 
-  console.log(ten_ed)
+  const handleKeywordsChange = (newKeywords) => {
+    setKeywords(newKeywords);
+  };
+
+  useEffect(() => {
+    setMatchingKeywords(findMatchingKeywords(keywords))
+  }, [keywords])
 
   return (
     <main>
-      <></>
+      <KeywordInput initialKeywords={keywords} onKeywordsChange={handleKeywordsChange} />
+      {matchingKeywords.map((item, index) => {
+        return (
+          <div key={index}>
+            <img src={item.img}></img>
+          </div>
+        )
+      })}
     </main>
   )
 }
